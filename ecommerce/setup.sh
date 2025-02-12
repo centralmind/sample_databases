@@ -1,51 +1,51 @@
 #!/bin/bash
-# Скрипт для полного сетапа PostgreSQL в Docker и загрузки данных из sample_data.zip
+# Script for a complete setup of PostgreSQL in Docker and loading data from sample_data.zip
 
 set -e
 
-# Проверяем наличие архива с данными
+# Check if the data archive exists
 if [ ! -f sample_data.zip ]; then
-  echo "Архив sample_data.zip не найден! Поместите его в текущую директорию."
+  echo "The archive sample_data.zip was not found! Please place it in the current directory."
   exit 1
 fi
 
-# Создаём папку для данных, если её ещё нет, и извлекаем архив
+# Create the data folder (if it doesn't exist) and extract the archive
 if [ ! -d data ]; then
-  echo "Создаём папку data..."
+  echo "Creating data folder..."
   mkdir -p data
 fi
 
-echo "Извлекаем sample_data.zip в папку data..."
+echo "Extracting sample_data.zip into the data folder..."
 unzip -o sample_data.zip -d data
 
-# Если контейнер уже существует, удаляем его
+# If a container with the same name already exists, remove it
 if docker ps -a --format '{{.Names}}' | grep -Eq "^some-postgres\$"; then
-    echo "Удаляем существующий контейнер some-postgres..."
+    echo "Removing the existing container some-postgres..."
     docker rm -f some-postgres
 fi
 
-echo "Запускаем Docker-контейнер PostgreSQL..."
+echo "Launching the PostgreSQL Docker container..."
 docker run --name some-postgres \
   -e POSTGRES_PASSWORD=mysecretpassword \
   -p 5432:5432 \
   -v "$(pwd)/data":/var/lib/postgresql/csv \
   -d postgres
 
-echo "Ожидаем запуск PostgreSQL (примерно 10 секунд)..."
+echo "Waiting for PostgreSQL to start (approximately 10 seconds)..."
 sleep 10
 
-# Формируем SQL-скрипт для создания базы, таблиц и загрузки данных.
+# Generate the SQL script that creates the database, tables, and loads the data
 cat > init.sql <<'EOF'
--- Удаляем базу данных sampledb, если она существует, и создаём новую
+-- Drop the sampledb database if it exists, then create a new one
 DROP DATABASE IF EXISTS sampledb;
 CREATE DATABASE sampledb;
 
 \connect sampledb
 
--- Устанавливаем параметр сеанса для разбора дат в формате DMY (например, "20-05-2017 14:56")
+-- Set the session parameter for date parsing in DMY format (e.g., "20-05-2017 14:56")
 SET datestyle TO 'DMY';
 
--- Удаляем таблицы, если они существуют (важен порядок удаления из-за внешних ключей)
+-- Drop tables if they exist (order matters due to foreign keys)
 DROP TABLE IF EXISTS fact_table;
 DROP TABLE IF EXISTS payment_dim;
 DROP TABLE IF EXISTS customer_dim;
@@ -53,14 +53,14 @@ DROP TABLE IF EXISTS item_dim;
 DROP TABLE IF EXISTS store_dim;
 DROP TABLE IF EXISTS time_dim;
 
--- Создаём таблицу платежей
+-- Create the payment dimension table
 CREATE TABLE payment_dim (
     payment_key TEXT PRIMARY KEY,
     trans_type  TEXT,
     bank_name   TEXT
 );
 
--- Создаём таблицу клиентов
+-- Create the customer dimension table
 CREATE TABLE customer_dim (
     customer_key TEXT PRIMARY KEY,
     name         TEXT,
@@ -68,7 +68,7 @@ CREATE TABLE customer_dim (
     nid          TEXT
 );
 
--- Создаём таблицу товаров
+-- Create the item dimension table
 CREATE TABLE item_dim (
     item_key    TEXT PRIMARY KEY,
     item_name   TEXT,
@@ -79,7 +79,7 @@ CREATE TABLE item_dim (
     unit        TEXT
 );
 
--- Создаём таблицу магазинов
+-- Create the store dimension table
 CREATE TABLE store_dim (
     store_key TEXT PRIMARY KEY,
     division  TEXT,
@@ -87,19 +87,19 @@ CREATE TABLE store_dim (
     upazila   TEXT
 );
 
--- Создаём таблицу времени
+-- Create the time dimension table
 CREATE TABLE time_dim (
     time_key TEXT PRIMARY KEY,
-    date TIMESTAMP,       -- Пример: "20-05-2017 14:56"
-    hour INTEGER,         -- Час
-    day INTEGER,          -- День месяца (число)
-    week TEXT,            -- Неделя (например, "3rd Week")
-    month INTEGER,        -- Месяц (например, 5)
-    quarter TEXT,         -- Квартал (например, "Q2")
-    year INTEGER          -- Год
+    date TIMESTAMP,       -- Example: "20-05-2017 14:56"
+    hour INTEGER,         -- Hour
+    day INTEGER,          -- Day of the month
+    week TEXT,            -- Week (e.g., "3rd Week")
+    month INTEGER,        -- Month (e.g., 5)
+    quarter TEXT,         -- Quarter (e.g., "Q2")
+    year INTEGER          -- Year
 );
 
--- Создаём факт-таблицу
+-- Create the fact table
 CREATE TABLE fact_table (
     payment_key TEXT,
     customer_key TEXT,
@@ -117,7 +117,7 @@ CREATE TABLE fact_table (
     FOREIGN KEY (store_key) REFERENCES store_dim(store_key)
 );
 
--- Загрузка данных из CSV-файлов с указанием кодировки WIN1252
+-- Load data from CSV files with WIN1252 encoding
 
 COPY payment_dim(payment_key, trans_type, bank_name)
 FROM '/var/lib/postgresql/csv/Trans_dim.csv'
@@ -144,14 +144,13 @@ FROM '/var/lib/postgresql/csv/fact_table.csv'
 WITH (FORMAT csv, HEADER true, DELIMITER ',', ENCODING 'WIN1252');
 EOF
 
-# Копируем init.sql в контейнер
-echo "Копируем init.sql в контейнер..."
+echo "Copying init.sql into the container..."
 docker cp init.sql some-postgres:/init.sql
 
-echo "Выполняем SQL-скрипт внутри контейнера..."
+echo "Executing the SQL script inside the container..."
 docker exec -i some-postgres psql -U postgres -f /init.sql
 
-echo "Сетап завершён!"
-echo "Подключайтесь к PostgreSQL по адресу localhost:5432, база данных 'sampledb', пользователь 'postgres', пароль 'mysecretpassword'."
+echo "Setup is complete!"
+echo "Connect to PostgreSQL at localhost:5432, database 'sampledb', user 'postgres', password 'mysecretpassword'."
 echo "postgresql://postgres:mysecretpassword@localhost:5432/sampledb"
 echo "host=localhost port=5432 dbname=sampledb user=postgres password=mysecretpassword"
