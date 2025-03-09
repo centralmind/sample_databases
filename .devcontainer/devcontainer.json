@@ -16,7 +16,7 @@
         }
       },
     "postCreateCommand": "bash .devcontainer/setup.sh",
-    "postStartCommand": "echo 'bash .devcontainer/run.sh' >> /home/vscode/.bashrc",
+    "postStartCommand": "bash -c '.devcontainer/run.sh; exec bash'",
     "containerEnv": {      
       "VAR1": "${VAR1}"
     }
