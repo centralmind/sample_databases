@@ -1,7 +1,7 @@
 VAR1=$(gh secret list | grep VAR1 | awk '{print $2}')
 
 if [[ -z "$VAR1" ]]; then
-  echo "Error: VAR1 is not available."
+  echo "Error: VAR1 is not available. Check your secrets."
   exit 1
 fi
 
