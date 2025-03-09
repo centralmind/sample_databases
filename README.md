@@ -21,7 +21,7 @@ The example uses a sample public PostgreSQL database hosted on Supabase.
 Run the following commands to start the discovery process. Replace `%OPENAI-KEY%` with your OpenAI API key:
 
 ```bash
-export API-KEY=%OPENAI-KEY%
+export API_KEY=%OPENAI-KEY%
 
 ```
 
@@ -30,7 +30,7 @@ export API-KEY=%OPENAI-KEY%
 ./gateway discover \
   --config connection.yaml \
   --db-type postgres \
-  --ai-api-key $API-KEY \
+  --ai-api-key $API_KEY \
   --prompt "Develop an API that enables a chatbot to retrieve information about data. Try to place yourself as analyst and think what kind of data you will require, based on that come up with useful API methods for that"
 ```
 
