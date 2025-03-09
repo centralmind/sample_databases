@@ -16,7 +16,7 @@
         }
       },
     "postCreateCommand": "bash .devcontainer/setup.sh",
-    "postStartCommand": "sleep 2 && code --execute-command workbench.action.terminal.new && sleep 1 && code --execute-command workbench.action.terminal.sendSequence --args {\"text\":\"bash .devcontainer/run.sh\\u000D\"}",
+    "postStartCommand": "echo 'bash .devcontainer/run.sh' >> /home/vscode/.bashrc",
     "containerEnv": {      
       "VAR1": "${VAR1}"
     }
