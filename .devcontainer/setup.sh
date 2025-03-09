@@ -5,4 +5,3 @@ wget https://github.com/centralmind/gateway/releases/latest/download/gateway-lin
 tar -xzf gateway-linux-amd64.tar.gz
 mv gateway-linux-amd64 gateway
 chmod +x gateway
-chmod +x .devcontainer/run.sh

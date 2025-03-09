@@ -4,21 +4,10 @@
     "portsAttributes": {
       "9090": {
         "label": "App Port",
-        "onAutoForward": "openPreview"
+        "onAutoForward": "openPreview",
+        "visibility": "public"
       }
-    },
-    "customizations": {
-        "vscode": {
-          "settings": {
-            "terminal.integrated.defaultProfile.linux": "bash"
-          },
-          "extensions": []
-        }
-      },
-    "postCreateCommand": "bash .devcontainer/setup.sh",
-    "postStartCommand": "bash -c '.devcontainer/run.sh; exec bash'",
-    "containerEnv": {      
-      "VAR1": "${VAR1}"
-    }
+    },   
+    "postCreateCommand": "bash .devcontainer/setup.sh"      
   }
   
