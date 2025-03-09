@@ -7,8 +7,16 @@
         "onAutoForward": "openPreview"
       }
     },
+    "customizations": {
+        "vscode": {
+          "settings": {
+            "terminal.integrated.defaultProfile.linux": "bash"
+          },
+          "extensions": []
+        }
+      },
     "postCreateCommand": "bash .devcontainer/setup.sh",
-    "postStartCommand": "code README.md && code -r . && sleep 2 && code --new-window && sleep 1 && code --execute-command workbench.action.terminal.new && sleep 1 && code --execute-command 'workbench.action.terminal.sendSequence' --args {\"text\":\"bash .devcontainer/run.sh\\u000D\"}",
+    "postStartCommand": "sleep 2 && code --execute-command workbench.action.terminal.new && sleep 1 && code --execute-command workbench.action.terminal.sendSequence --args {\"text\":\"bash .devcontainer/run.sh\\u000D\"}",
     "containerEnv": {      
       "VAR1": "${VAR1}"
     }
