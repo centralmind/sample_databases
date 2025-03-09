@@ -1,0 +1,6 @@
+hosts:
+  - localhost
+user: postgres
+password: mysecretpassword
+database: dvdrental
+port: 5432

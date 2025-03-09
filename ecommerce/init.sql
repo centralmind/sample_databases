@@ -1,41 +1,3 @@
-#!/bin/bash
-# Script for full setup of PostgreSQL in Docker and loading data from sample_data.zip
-
-set -e
-
-# Check if the data archive is present
-if [ ! -f sample_data.zip ]; then
-  echo "The sample_data.zip archive was not found! Please place it in the current directory."
-  exit 1
-fi
-
-# Create a data folder if it doesn't exist and extract the archive
-if [ ! -d data ]; then
-  echo "Creating the data folder..."
-  mkdir -p data
-fi
-
-echo "Extracting sample_data.zip into the data folder..."
-unzip -o sample_data.zip -d data
-
-# If the container already exists, remove it
-if docker ps -a --format '{{.Names}}' | grep -Eq "^some-postgres\$"; then
-    echo "Removing existing container some-postgres..."
-    docker rm -f some-postgres
-fi
-
-echo "Starting the PostgreSQL Docker container..."
-docker run --name some-postgres \
-  -e POSTGRES_PASSWORD=mysecretpassword \
-  -p 5432:5432 \
-  -v "$(pwd)/data":/var/lib/postgresql/csv \
-  -d postgres
-
-echo "Waiting for PostgreSQL to start (about 10 seconds)..."
-sleep 10
-
-# Generate an SQL script for creating the database, tables, and loading data
-cat > init.sql <<'EOF'
 -- Drop the database sampledb if it exists and create a new one
 DROP DATABASE IF EXISTS sampledb;
 CREATE DATABASE sampledb;
@@ -142,16 +104,3 @@ WITH (FORMAT csv, HEADER true, DELIMITER ',', ENCODING 'WIN1252');
 COPY fact_table(payment_key, customer_key, time_key, item_key, store_key, quantity, unit, unit_price, total_price)
 FROM '/var/lib/postgresql/csv/fact_table.csv'
 WITH (FORMAT csv, HEADER true, DELIMITER ',', ENCODING 'WIN1252');
-EOF
-
-# Copy init.sql into the container
-echo "Copying init.sql into the container..."
-docker cp init.sql some-postgres:/init.sql
-
-echo "Executing the SQL script inside the container..."
-docker exec -i some-postgres psql -U postgres -f /init.sql
-
-echo "Setup completed!"
-echo "Connect to PostgreSQL at localhost:5432, database 'sampledb', user 'postgres', password 'mysecretpassword'."
-echo "postgresql://postgres:mysecretpassword@localhost:5432/sampledb"
-echo "host=localhost port=5432 dbname=sampledb user=postgres password=mysecretpassword"
