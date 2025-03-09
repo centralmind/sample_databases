@@ -1,4 +1,6 @@
-# Sample Database API Generation Example
+<a href='https://codespaces.new/centralmind/sample_databases'><img src='https://github.com/codespaces/badge.svg' alt='Open in GitHub Codespaces' style='max-width: 100%;'></a>
+
+# Sample Database API Generation Example using Github Codespaces
 
 This example demonstrates how to:
 - Launch the Discovery process
@@ -9,7 +11,8 @@ The example uses a sample public PostgreSQL database hosted on Supabase.
 
 ## Prerequisites
 
-- OpenAI API key
+- <a href="https://platform.openai.com/api-keys">OpenAI API Key</a>
+- 🚀 <a href="https://codespaces.new/centralmind/sample_databases>">Launch Codespaces</a> with prepared enviroment
 
 ## Usage
 
