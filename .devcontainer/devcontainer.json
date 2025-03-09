@@ -8,10 +8,7 @@
       }
     },
     "postCreateCommand": "bash .devcontainer/setup.sh",
-    "runArgs": ["--network=host"],
-    "remoteUser": "vscode",
-    "containerEnv": {
-      "PORT": "9090",
+    "containerEnv": {      
       "OPENAI_KEY": "${OPENAI_KEY}"
     }
   }
