@@ -39,7 +39,7 @@ export API_KEY=%OPENAI-KEY%
 To start the REST API server and test its functionality, run:
 
 ```bash
-./gateway start \
+./gateway start rest \
   --config gateway.yaml \
   --servers https://${CODESPACE_NAME}-9090.app.github.dev/
 ```
