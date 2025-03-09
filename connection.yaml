@@ -1,0 +1,6 @@
+hosts:
+  - aws-0-eu-central-1.pooler.supabase.com
+user: readonly_user.erjbgpchxpyteqwhxauj
+password: supersecretepassword
+database: postgres
+port: 6543

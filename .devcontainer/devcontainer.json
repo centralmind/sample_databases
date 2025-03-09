@@ -1,0 +1,18 @@
+{
+    "name": "Gateway Example Codespace",
+    "forwardPorts": [9090],
+    "portsAttributes": {
+      "9090": {
+        "label": "App Port",
+        "onAutoForward": "openPreview"
+      }
+    },
+    "postCreateCommand": "bash .devcontainer/setup.sh",
+    "runArgs": ["--network=host"],
+    "remoteUser": "vscode",
+    "containerEnv": {
+      "PORT": "9090",
+      "OPENAI_KEY": "${OPENAI_KEY}"
+    }
+  }
+  
