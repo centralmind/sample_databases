@@ -8,6 +8,7 @@
       }
     },
     "postCreateCommand": "bash .devcontainer/setup.sh",
+    "postStartCommand": "code README.md",
     "containerEnv": {      
       "OPENAI_KEY": "${OPENAI_KEY}"
     }
