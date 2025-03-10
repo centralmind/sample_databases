@@ -28,7 +28,7 @@ export API_KEY=%OPENAI-KEY%
 
 ```bash
 ./gateway discover \
-  --config connection.yaml \ 
+  --config connection.yaml \
   --ai-api-key $API_KEY \
   --prompt "Develop an API that enables a chatbot to retrieve information about data. Try to place yourself as analyst and think what kind of data you will require, based on that come up with useful API methods for that"
 ```
