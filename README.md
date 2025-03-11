@@ -11,7 +11,7 @@ The example uses a sample public PostgreSQL database hosted on Supabase.
 
 ## Prerequisites
 
-- <a href="https://aistudio.google.com/apikey">Google Gemeni API Key</a>
+- <a href="https://aistudio.google.com/apikey">Google Gemeni API Key</a> - API Free tier is available
 - 🚀 <a href="https://codespaces.new/centralmind/sample_databases>">Launch Codespaces</a> with prepared enviroment
 
 ## Usage
@@ -30,7 +30,7 @@ export API_KEY=%GEMINI-KEY%
 ```bash
 ./gateway discover \
   --config connection.yaml \
-  --ai-provider gemini
+  --ai-provider gemini \
   --ai-api-key $API_KEY \
   --prompt "Develop an API that enables a chatbot to retrieve information about data. Try to place yourself as analyst and think what kind of data you will require, based on that come up with useful API methods for that"
 ```
