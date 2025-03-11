@@ -3,6 +3,7 @@
 # Sample Database API Generation Example using Github Codespaces
 
 This example demonstrates how to:
+
 - Launch the Discovery process
 - Generate APIs
 - Launch an API Server
@@ -18,20 +19,17 @@ The example uses a sample public PostgreSQL database hosted on Supabase.
 
 ### 1. Start the Discovery Process
 
-Run the following commands to start the discovery process. Replace `%GEMINI-KEY%` with your Gemini API key.
- Google provides a free tier for API keys without requiring a credit card or a complicated registration process, <a href="https://aistudio.google.com/apikey">here</a>:
+Run the following commands to start the discovery process. Replace `YOUR_KEY` with your Gemini API key.
+Google provides a free tier for API keys without requiring a credit card or a complicated registration process, <a href="https://aistudio.google.com/apikey">here</a>:
 
 ```bash
-export API_KEY=%GEMINI-KEY%
-
+export GEMINI_API_KEY=YOUR_KEY
 ```
-
 
 ```bash
 ./gateway discover \
   --config connection.yaml \
   --ai-provider gemini \
-  --ai-api-key $API_KEY \
   --prompt "Develop an API that enables a chatbot to retrieve information about data. Try to place yourself as analyst and think what kind of data you will require, based on that come up with useful API methods for that"
 ```
 
@@ -42,7 +40,7 @@ To start the REST API server and test its functionality, run:
 ```bash
 ./gateway start rest \
   --config gateway.yaml \
-  --servers https://${CODESPACE_NAME}-9090.app.github.dev/
+  --servers https://${CODESPACE_NAME}.app.github.dev/
 ```
 
 ## Note
