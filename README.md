@@ -11,17 +11,18 @@ The example uses a sample public PostgreSQL database hosted on Supabase.
 
 ## Prerequisites
 
-- <a href="https://platform.openai.com/api-keys">OpenAI API Key</a>
+- <a href="https://aistudio.google.com/apikey">Google Gemeni API Key</a>
 - 🚀 <a href="https://codespaces.new/centralmind/sample_databases>">Launch Codespaces</a> with prepared enviroment
 
 ## Usage
 
 ### 1. Start the Discovery Process
 
-Run the following commands to start the discovery process. Replace `%OPENAI-KEY%` with your OpenAI API key:
+Run the following commands to start the discovery process. Replace `%GEMINI-KEY%` with your Gemini API key.
+ Google provides a free tier for API keys without requiring a credit card or a complicated registration process, <a href="https://aistudio.google.com/apikey">here</a>:
 
 ```bash
-export API_KEY=%OPENAI-KEY%
+export API_KEY=%GEMINI-KEY%
 
 ```
 
@@ -29,6 +30,7 @@ export API_KEY=%OPENAI-KEY%
 ```bash
 ./gateway discover \
   --config connection.yaml \
+  --ai-provider gemini
   --ai-api-key $API_KEY \
   --prompt "Develop an API that enables a chatbot to retrieve information about data. Try to place yourself as analyst and think what kind of data you will require, based on that come up with useful API methods for that"
 ```
