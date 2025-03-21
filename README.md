@@ -40,7 +40,7 @@ To start the REST API server and test its functionality, run:
 ```bash
 ./gateway start rest \
   --config gateway.yaml \
-  --servers https://${CODESPACE_NAME}.app.github.dev/
+  --servers https://${CODESPACE_NAME}-9090.app.github.dev/
 ```
 
 ## Note
